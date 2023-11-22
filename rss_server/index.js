@@ -2,25 +2,54 @@ import Parser from 'rss-parser';
 import cors from 'cors'
 import express from 'express'
 
-const feedURL = 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml'
+const parser = new Parser();
+const app = express();
+const PORT = 4000;
 
-const parser = new Parser()
-let articles = []
-const parse = async url => {
-	const feed = await parser.parseURL(url)
-	const resource = feed.title
-	feed.items.forEach((item) => articles.push({resource:resource , title:item.title , content:item.content , link:item.link })  )
-}
+app.use(cors());
 
-parse(feedURL);
+const feeds = [
+	{
+		url: 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',
+		topic: 'World',
+	},
+	{
+		url: 'https://rss.nytimes.com/services/xml/rss/nyt/Business.xml',
+		topic: 'Business',
+	},
+];
 
-let app = express()
-app.use(cors())
+const fetchArticles = async (url) => {
+	const feed = await parser.parseURL(url);
+	const resource = feed.title;
+	return feed.items.map((item) => ({
+		resource: resource,
+		title: item.title,
+		content: item.content,
+		link: item.link,
+		date:item.pubDate,
+	}));
+};
 
-app.get('/' , (req , res)=>{
-	res.send(articles)
-})
+app.get('/articles', async (req, res) => {
+	try {
+		const selectedTopics = req.query.topics; // за замовчуванням World
+		let selectedArticles = [];
 
-const server = app.listen('4000')
+		for (const feed of feeds) {
+			if (selectedTopics.includes(feed.topic)) {
+				const articles = await fetchArticles(feed.url);
+				selectedArticles = [...selectedArticles, ...articles];
+			}
+		}
 
-export default server
+		res.json(selectedArticles);
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+});
+
+const server = app.listen(PORT, () => {
+});
+
+export default server;

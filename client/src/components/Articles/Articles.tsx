@@ -1,27 +1,38 @@
 import React, {useEffect, useState} from 'react';
-import ChannelSelection from "./ChannelSelection";
-import Article from "./Article";
 import axios from "axios";
 import {BiWorld} from "react-icons/bi";
 import {MdBusinessCenter, MdOutlineHealthAndSafety, MdOutlineSportsVolleyball} from "react-icons/md";
 import {SiJetpackcompose} from "react-icons/si";
+import { compareDesc, format } from 'date-fns';
+
+import ChannelSelection from "./ChannelSelection";
+import Article from "./Article";
+
+type article = {
+	title:string;
+	content:string;
+	resource:string;
+	link:string;
+	date:string
+}
 
 const Articles = () => {
 
-	const [isPlaceholderSelected, setIsPlaceholderSelected] = useState(true)
-	const [articles , setArticles] = useState([])
+	const [selectedTopics, setSelectedTopics] = useState<string[]>(['World'])
+	const [articles , setArticles] = useState<article[]>([])
 
-	console.log(articles , 'ARTICLES')
-	type article = {
-		title:string;
-		content:string;
-		resource:string;
-		link:string;
+	const dateFormatter = (date:string) =>{
+		return format(new Date(date), 'dd MMMM yyyy');
 	}
+
 	const getArticles = async () => {
-		const res = await axios.get('http://localhost:4000/')
+		const res = await axios.get('http://localhost:4000/articles?topics=World&topics=Business')
 		setArticles(res.data)
 	}
+
+	const sortedArticles = articles.sort((a, b) =>
+		compareDesc(new Date(a.date), new Date(b.date))
+	);
 
 	useEffect(()=>{
 		getArticles()
@@ -35,19 +46,19 @@ const Articles = () => {
 
 			<div className={'fixed top-16 left-8 gap-3 flex flex-col '}>
 				<div className={'text-white bg-purple-500 p-6 shadow-2xl w-[300px] h-[400px] rounded-md text-center'}>
-				   <h3 className={'text-2xl'}>Select channels</h3>
+				   <h3 className={'text-2xl'}>Select topics</h3>
 					<div className={' h-full flex flex-col  '}>
-						<ChannelSelection isSelected={isPlaceholderSelected} onToggleSelection={setIsPlaceholderSelected} channelName={'World News'} icon={<BiWorld/>}/>
-						<ChannelSelection isSelected={isPlaceholderSelected} onToggleSelection={setIsPlaceholderSelected} channelName={'Business News'} icon={<MdBusinessCenter />}/>
-						<ChannelSelection isSelected={isPlaceholderSelected} onToggleSelection={setIsPlaceholderSelected} channelName={'Technology News'} icon={<SiJetpackcompose />}/>
-						<ChannelSelection isSelected={isPlaceholderSelected} onToggleSelection={setIsPlaceholderSelected} channelName={'Sport News'} icon={<MdOutlineSportsVolleyball/>}/>
-						<ChannelSelection isSelected={isPlaceholderSelected} onToggleSelection={setIsPlaceholderSelected} channelName={'Health News'} icon={<MdOutlineHealthAndSafety />}/>
+						<ChannelSelection selectedTopics={selectedTopics} onToggleSelection={setSelectedTopics} topic={'World'} icon={<BiWorld/>}/>
+						<ChannelSelection selectedTopics={selectedTopics} onToggleSelection={setSelectedTopics} topic={'Business'} icon={<MdBusinessCenter />}/>
+						<ChannelSelection selectedTopics={selectedTopics} onToggleSelection={setSelectedTopics} topic={'Technology'} icon={<SiJetpackcompose />}/>
+						<ChannelSelection selectedTopics={selectedTopics} onToggleSelection={setSelectedTopics} topic={'Sport'} icon={<MdOutlineSportsVolleyball/>}/>
+						<ChannelSelection selectedTopics={selectedTopics} onToggleSelection={setSelectedTopics} topic={'Health'} icon={<MdOutlineHealthAndSafety />}/>
 					</div>
 			    </div>
 			</div>
 			<div className={'mt-16'}>
-				{articles ? articles.map((el:article) => {
-				return	<Article link={el.link} key={el.title} title={el.title} content={el.content} resource={el.resource} />
+				{articles ? sortedArticles.map((el:article) => {
+				return	<Article link={el.link} key={el.title} title={el.title} content={el.content} resource={el.resource} date={ dateFormatter(el.date) } />
 				}) : <></> }
 
 			</div>

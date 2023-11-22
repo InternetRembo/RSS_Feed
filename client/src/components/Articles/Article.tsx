@@ -5,6 +5,7 @@ interface ArticleProps {
 	content: string;
 	resource: string;
 	link:string;
+	date:string
 }
 
 function cutString(str:string) {
@@ -15,13 +16,14 @@ function cutString(str:string) {
 	}
 }
 
-const Article:React.FC<ArticleProps> = ({title , resource , content , link}) => {
+const Article:React.FC<ArticleProps> = ({title , resource , content , link , date}) => {
 
 	return (
 		<div onClick={()=>{ window.open(link, '_blank');}} className={' relative p-1 flex flex-col items-center justify-center w-[1000px] h-[150px] text-center rounded-md shadow mt-4 cursor-pointer border-b hover:bg-gray-100'}>
 			<h2 className={'text-2xl font-bold'}>{title}</h2>
-			<p className={'text-xl'}>{cutString(content)}</p>
+			<p className={'text-lg'}>{cutString(content)}</p>
 			<span className={'absolute font-bold top-1 left-2 text-gray-600 text-sm'}>{resource}</span>
+			<span className={'absolute font-bold bottom-1 right-2 text-gray-600 text-sm'}>{date}</span>
 		</div>
 	);
 };
