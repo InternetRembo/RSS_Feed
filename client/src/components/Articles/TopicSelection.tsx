@@ -9,16 +9,16 @@ type TopicSelectionProps = {
 	selectedTopics: string[];
 	onToggleSelection: (arr: string[]) => void;
 	icon: React.ReactNode
-	isModalOpen:boolean
-	setIsModalOpen: (arg:boolean)=> void
-	onTopicDelete: ()=> void
-	setTopicToUpdate: (topic:TopicType) => void
-	setMode:(mode:'Create'|'Update') => void
+	isModalOpen: boolean
+	setIsModalOpen: (arg: boolean) => void
+	onTopicDelete: () => void
+	setTopicToUpdate: (topic: TopicType) => void
+	setMode: (mode: 'Create' | 'Update') => void
 };
 
-
 const TopicSelection: React.FC<TopicSelectionProps> = (
-	{selectedTopics,
+	{
+		selectedTopics,
 		topic,
 		onToggleSelection,
 		icon,
@@ -26,7 +26,8 @@ const TopicSelection: React.FC<TopicSelectionProps> = (
 		setIsModalOpen,
 		onTopicDelete,
 		setMode,
-		setTopicToUpdate}) => {
+		setTopicToUpdate
+	}) => {
 
 	const onToggle = (topic: string) => {
 		if (selectedTopics.includes(topic)) {
@@ -44,7 +45,8 @@ const TopicSelection: React.FC<TopicSelectionProps> = (
 
 	return (
 		<span className={' inline-block flex items-center  gap-2 text-xl mt-6'}>
-			{icon} <span className={'flex gap-2 items-center cursor-pointer hover:underline '} onClick={handleClick}>{topic} News
+			{icon} <span className={'flex gap-2 items-center cursor-pointer hover:underline '}
+						 onClick={handleClick}>{topic} News
 
 								<button
 									className={'bg-white w-[20px] h-[20px] flex items-center justify-center'}>
@@ -52,10 +54,10 @@ const TopicSelection: React.FC<TopicSelectionProps> = (
 										<FaCheck className={'text-gray-500 text-sm'}/> : ''}
 								</button>
 			</span>
-			                     <button className={'ml-2'} onClick={ (e) => {
-			                     	e.stopPropagation()
+			                     <button className={'ml-2'} onClick={(e) => {
+									 e.stopPropagation()
 									 setMode('Update')
-									 setTopicToUpdate({title:topic , description:topic + ' description'})
+									 setTopicToUpdate({title: topic, description: topic + ' description'})
 									 setIsModalOpen(true)
 								 }}>
                                          <GrUpdate size={20}/>

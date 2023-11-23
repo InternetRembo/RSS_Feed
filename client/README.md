@@ -1,10 +1,29 @@
-# Getting Started with Create React App
+# Getting Started
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+To start, we need to run the client and server part of the program alternately
+
+First go to the directory rss_server. Run:
+### `cd rss_server`
+
+After that, start the server by running the command:
+
+### `npm start` 
+(The server will be started on port number 4000)
+
+When the server is ready, go to the client directory:
+
+### `cd client`
+
+Run the command:
+
+### `npm start`
+
+After that, go to [http://localhost:3000](http://localhost:3000) in your browser to view the application in development mode
+
 ## Available Scripts
 
-In the project directory, you can run:
 
 ### `npm start`
 
