@@ -17,6 +17,18 @@ const feeds = [
 		url: 'https://rss.nytimes.com/services/xml/rss/nyt/Business.xml',
 		topic: 'Business',
 	},
+	{
+		url: 'https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml',
+		topic: 'Technology',
+	},
+	{
+		url: 'https://rss.nytimes.com/services/xml/rss/nyt/Sports.xml',
+		topic: 'Sports',
+	},
+	{
+		url: 'https://rss.nytimes.com/services/xml/rss/nyt/Health.xml',
+		topic: 'Health',
+	},
 ];
 
 const fetchArticles = async (url) => {
@@ -33,7 +45,7 @@ const fetchArticles = async (url) => {
 
 app.get('/articles', async (req, res) => {
 	try {
-		const selectedTopics = req.query.topics; // за замовчуванням World
+		const selectedTopics = req.query.topics;
 		let selectedArticles = [];
 
 		for (const feed of feeds) {

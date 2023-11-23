@@ -1,7 +1,8 @@
 import React from 'react';
+import {useNavigate} from "react-router-dom";
 
 const AuthPage = () => {
-
+	const navigante = useNavigate()
 	return (
 		<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 to-pink-600">
 			<div className="absolute top-1/2 transform -translate-y-1/2 w-[600px] h-[400px] shadow-2xl bg-white z-20 flex flex-col items-center rounded-xl">
@@ -12,6 +13,7 @@ const AuthPage = () => {
 							Username
 						</label>
 						<input
+							value={'some username'}
 							className="text-xl h-[50px] shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 							id="username"
 							type="text"
@@ -23,6 +25,7 @@ const AuthPage = () => {
 							Password
 						</label>
 						<input
+							value={'some password'}
 							className="text-xl h-[50px] shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 							id="password"
 							type="password"
@@ -30,8 +33,9 @@ const AuthPage = () => {
 						/>
 					</div>
 					<button
+						onClick={() => navigante('/')}
 						className=" mt-4 self-end bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-[100px] h-[40px] "
-						type="button"
+						type="submit"
 					>
 						Log In
 					</button>
